@@ -148,6 +148,31 @@ The pipeline produces:
 - NASA Earthdata account (free) for VIIRS data
 - ~8GB RAM for typical 100x100km regions
 
+
+## OGC / MAAP DPS
+
+Thin OGC Application Package layer (branch `ogc-thin-wrapper`):
+
+| File | Role |
+|------|------|
+| `build.sh` | Install `uv` + `maap-py`; `uv sync` this repo |
+| `run.sh` | Secrets → `uv run blackmarble` → `output/` |
+| `resolve_earthdata_token.py` | Load token from env or MAAP Secrets (never CLI) |
+| `environment.yml` / `Dockerfile` | Packaging image |
+| `algorithm_config.yml` / `maap_dps_algorithm_config.yml` | Register metadata |
+| `workflows/commandline.cwl` | OGC Application Package |
+
+Earthdata auth (create once in ADE):
+
+```python
+from maap.maap import MAAP
+MAAP().secrets.add_secret("EARTHDATA_TOKEN", "<your-token>")
+```
+
+Register with repository `https://github.com/NASA-IMPACT/veda-black-marble`,
+version/branch `ogc-thin-wrapper`, build `veda-black-marble/build.sh`,
+run `veda-black-marble/run.sh`.
+
 ## License
 
 [Apache License 2.0](LICENSE) - National Aeronautics and Space Administration (NASA)

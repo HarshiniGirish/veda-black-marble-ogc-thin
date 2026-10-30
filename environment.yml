@@ -1,0 +1,13 @@
+# Minimal packaging-layer deps for MAAP OGC/DPS builds.
+# Science dependencies come from this repo via `uv sync` in build.sh.
+name: notebook
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12
+  - pip
+  - git
+  - curl
+  - pip:
+      - maap-py

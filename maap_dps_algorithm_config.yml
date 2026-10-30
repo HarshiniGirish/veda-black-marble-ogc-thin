@@ -1,0 +1,49 @@
+# MAAP DPS / Register Algorithm UI style config
+# Thin OGC layer in NASA-IMPACT/veda-black-marble (branch ogc-thin-wrapper).
+#
+# Earthdata auth: MAAP Secrets only (never register the token as a job input).
+#   MAAP().secrets.add_secret("EARTHDATA_TOKEN", "<token>")
+algorithm_description: >
+  OGC/DPS wrapper for VEDA Black Marble. Runs `uv sync` then
+  `uv run blackmarble`. Earthdata credentials load from MAAP Secrets
+  (default EARTHDATA_TOKEN).
+algorithm_name: veda-black-marble
+algorithm_version: ogc-thin-wrapper
+repository_url: https://github.com/NASA-IMPACT/veda-black-marble.git
+docker_container_url: mas.maap-project.org/root/maap-workspaces/custom_images/maap_base:v6.0.0
+disk_space: 40GB
+queue: maap-dps-worker-16gb
+build_command: veda-black-marble/build.sh
+run_command: veda-black-marble/run.sh
+inputs:
+  config: []
+  file: []
+  positional:
+    - name: bbox
+      description: Bounding box min_lon,min_lat,max_lon,max_lat (WGS84). Lat span >= 0.05 deg.
+      default: "-122.55,37.69,-122.32,37.81"
+      required: true
+    - name: date
+      description: Target date YYYY-MM-DD
+      default: "2023-06-15"
+      required: true
+    - name: config
+      description: Preset default | high_quality | fast
+      default: "fast"
+      required: false
+    - name: osm_source
+      description: overpass or layercake
+      default: "overpass"
+      required: false
+    - name: wgs84
+      description: Also export EPSG:4326 (true/false)
+      default: "false"
+      required: false
+    - name: basename
+      description: Output stem → output/<basename>.tif (maps to --output-path)
+      default: "black_marble_output"
+      required: false
+    - name: earthdata_secret_name
+      description: MAAP secret name for Earthdata token (not the token value)
+      default: "EARTHDATA_TOKEN"
+      required: false
